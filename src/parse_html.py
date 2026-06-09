@@ -8,22 +8,35 @@ def parse(file: str):
         content = content[mainStartIdx:mainEndIdx]
         data_as_list = []
         end = 0
-        data_as_start_idx = content.find('data-as="') + 12 # since len('data-as="p">') = 12
+        data_as_start_idx = content.find('data-as="') # since len('data-as="p">') = 12
         # if we didn't find text content .find() will return -1
         while data_as_start_idx != -1:
-            data_as_start_idx += end
+            data_as_start_idx += end + 12
             end = content[data_as_start_idx:].find("</span>") + data_as_start_idx
-            print(data_as_start_idx, end)
             position_idx_list.append([data_as_start_idx, "text"])
             data_as_list.append(
                 content[data_as_start_idx: end]
             )
             data_as_start_idx = content[end: ].find('data-as="')
 
-        print(data_as_start_idx, end)
-        out_f.write(content.replace("\n", " "))
-        for l in data_as_list:
-            print(l.replace("\n", "\\n"), end="\n\n")
+        filtered_para_list = []
+
+        for para in data_as_list:
+            filter_para = ""
+            start = 0
+            end = para.find("<")
+            if end == -1:
+                filtered_para_list.append(para)
+                continue
+            while True:
+                filter_para += para[start: end]
+                start = para[end:].find(">") + end + 1
+                end = para[start:].find("<") 
+                if end == -1: 
+                    break
+                end += start
+            filter_para += para[start: end]
+            filtered_para_list.append(filter_para)
 
 # cd src and then run:
 parse("../Action - Chainlit.html")
