@@ -49,6 +49,17 @@ def parse(file: str):
             else:
                 formatted_data_list.append(para)
         
+        code_data_as_list = []
+        code_end = 0
+        code_data_as_start_idx = content.find('<pre') + 1
+        while code_data_as_start_idx != code_end:
+            code_end = content[code_data_as_start_idx:].find("</pre") + code_data_as_start_idx
+            position_idx_list.append([code_data_as_start_idx, "code"])
+            code_data_as_list.append(
+                content[code_data_as_start_idx - 1: code_end]
+            )
+            code_data_as_start_idx = content[code_end: ].find('<pre') + code_end + 1
+        
 
 # cd src and then run:
 parse("../Action - Chainlit.html")
