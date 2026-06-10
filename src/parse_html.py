@@ -60,6 +60,24 @@ def parse(file: str):
             )
             code_data_as_start_idx = content[code_end: ].find('<pre') + code_end + 1
         
+        code_filtered_para_list = []
 
+        for para in code_data_as_list:
+            code_filter_para = ""
+            start = 0
+            end = para.find("<")
+            if end == -1:
+                code_filtered_para_list.append(para)
+                continue
+            while True:
+                code_filter_para += para[start: end]
+                start = para[end:].find(">") + end + 1
+                end = para[start:].find("<") 
+                if end == -1: 
+                    break
+                end += start
+            code_filter_para += para[start: end]
+            code_filtered_para_list.append(code_filter_para)
+        
 # cd src and then run:
 parse("../Action - Chainlit.html")
