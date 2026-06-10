@@ -31,12 +31,24 @@ def parse(file: str):
             while True:
                 filter_para += para[start: end]
                 start = para[end:].find(">") + end + 1
-                end = para[start:].find("<") 
+                end = para[start:].find("<")
                 if end == -1: 
                     break
                 end += start
             filter_para += para[start: end]
             filtered_para_list.append(filter_para)
+        
+        formatted_data_list = []
+        # ig we can make it better/faster by doing this above only
+        for para in filtered_para_list:
+            if "\n" in para:
+                whole = ""
+                for part in para.split("\n"):
+                    whole += part.strip() + " "
+                formatted_data_list.append(whole)
+            else:
+                formatted_data_list.append(para)
+        
 
 # cd src and then run:
 parse("../Action - Chainlit.html")
