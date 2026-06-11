@@ -1,5 +1,8 @@
+from pathlib import Path
+# cd src and then run this file:
+
 def parse(file: str):
-    with open(file, mode="r", encoding="utf-8") as input_f, open(file=file.removesuffix(".html") +" output.txt",mode="w", encoding="utf-8") as out_f:
+    with open(file, mode="r", encoding="utf-8") as input_f, open(file=file.removesuffix(".html") + " output.txt",mode="w", encoding="utf-8") as out_f:
         position_idx_list = []
         content = input_f.read()
         mainStartIdx = content.find('<main id="content-container">')
@@ -96,5 +99,20 @@ def parse(file: str):
         for para in final_result_list:
             out_f.write(para + "\n\n")
 
-# cd src and then run:
-parse("../Action - Chainlit.html")
+# parse("../Action - Chainlit.html")
+
+def parseAllHtml():
+    for f in all_html_files:
+        parse(str(f))
+
+def clearTxt():
+    """clear all text files"""
+    for f in all_text_files:
+        f.unlink()
+
+all_files = Path("./..")
+all_html_files = all_files.glob('*.html')
+all_text_files = all_files.glob('*.txt')
+
+parseAllHtml()
+# clearTxt()
