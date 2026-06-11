@@ -79,5 +79,22 @@ def parse(file: str):
             code_filter_para += para[start: end]
             code_filtered_para_list.append(code_filter_para)
         
+        code_counter = 0
+        text_counter = 0
+        final_result_list = []
+        position_idx_list.sort()
+
+        for [idx, kind] in position_idx_list:
+            match kind:
+                case "text":
+                    final_result_list.append(formatted_data_list[text_counter])
+                    text_counter += 1
+                case "code":
+                    final_result_list.append(code_filtered_para_list[code_counter])
+                    code_counter += 1
+
+        for para in final_result_list:
+            out_f.write(para + "\n\n")
+
 # cd src and then run:
 parse("../Action - Chainlit.html")
